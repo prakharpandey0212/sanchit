@@ -3,898 +3,614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanchit Jouhri | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Dancing+Script:wght@600&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Sanchit Jouhri | Visual & VFX Artist</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
-        /* --- CSS Reset & Variables --- */
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-color: #e0e0e0;
-            --radius-xl: 4vh; 
-            --radius-lg: 3vh;
-            --radius-md: 2vh; 
-            --padding-std: 2vh;
+            --bg-color: #050505;
+            --accent-purple: #b026ff;
+            --accent-cyan: #00f2ea;
+            --text-main: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --radius-xl: 30px;
+            --radius-md: 15px;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        html { scroll-behavior: smooth; overflow-x: hidden; }
 
         body {
             background-color: var(--bg-color);
-            color: #000;
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
-            font-size: 1.8vh;
-            padding-top: 10vh;
         }
 
-        /* --- Animations --- */
-        @keyframes glow {
-            0% { box-shadow: 0 0 2vh rgba(255, 255, 255, 0.5); }
-            50% { box-shadow: 0 0 5vh rgba(255, 255, 255, 0.9); }
-            100% { box-shadow: 0 0 2vh rgba(255, 255, 255, 0.5); }
+        /* --- CUSTOM CURSOR --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999; pointer-events: none;
         }
-        @keyframes star-spin {
-            0% { transform: translate(-50%, 50%) rotate(0deg) scale(1); }
-            50% { transform: translate(-50%, 50%) rotate(180deg) scale(1.3); text-shadow: 0 0 2vh #fff; }
-            100% { transform: translate(-50%, 50%) rotate(360deg) scale(1); }
+        .cursor-dot { width: 8px; height: 8px; background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid var(--accent-purple);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
-        @keyframes ripple-effect {
-            0% { width: 100%; height: 100%; opacity: 0.6; border-width: 0.3vh; }
-            100% { width: 300%; height: 300%; opacity: 0; border-width: 0; }
+        body:hover .cursor-outline.hovered {
+            width: 70px; height: 70px; background: rgba(176, 38, 255, 0.1);
+            border-color: var(--accent-cyan); mix-blend-mode: screen;
         }
 
-        .reveal {
-            opacity: 0;
-            transition: all 0.8s ease-out;
+        /* --- AMBIENT GLOW --- */
+        .ambient-glow {
+            position: fixed; width: 600px; height: 600px; border-radius: 50%;
+            filter: blur(120px); z-index: -1; opacity: 0.2;
+            animation: float-glow 10s infinite alternate ease-in-out; pointer-events: none;
         }
-        .reveal-left { transform: translateX(-10vw); }
-        .reveal-right { transform: translateX(10vw); }
-        .reveal.active { opacity: 1; transform: translateX(0); }
+        .glow-1 { top: -10%; left: -10%; background: var(--accent-purple); }
+        .glow-2 { bottom: 10%; right: -10%; background: var(--accent-cyan); animation-delay: 5s; }
+        @keyframes float-glow { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
 
         /* --- NAVBAR --- */
-        .navbar-container {
-            width: 100%;
-            height: 10vh;
-            position: fixed;
-            top: 0; left: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2.5vw; 
-            background: rgba(224, 224, 224, 0.6);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            z-index: 1000;
-            box-shadow: 0 0.5vh 2vh rgba(0,0,0,0.05);
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; position: fixed; width: 100%; top: 0; z-index: 1000;
+            backdrop-filter: blur(15px); background: rgba(0,0,0,0.6);
+            border-bottom: 1px solid var(--glass-border);
         }
+        .logo { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 24px; letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-item {
+            text-decoration: none; color: #aaa; font-size: 14px; text-transform: uppercase;
+            letter-spacing: 1px; transition: 0.3s;
+        }
+        .nav-item:hover, .nav-item.active { color: var(--accent-cyan); text-shadow: 0 0 10px var(--accent-cyan); }
 
-        .nav-links {
-            display: flex;
-            gap: 2vw;
-            background: transparent; 
-            padding: 0;
-            color: #000;
-            font-size: 1.6vh;
-            align-items: center;
-            font-weight: 500;
+        /* --- HERO SECTION --- */
+        .hero-container {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding-top: 80px; perspective: 1000px;
         }
-
-        .nav-item { 
-            cursor: pointer; 
-            opacity: 0.7; 
-            transition: opacity 0.3s; 
-            position: relative; 
-            text-decoration: none; 
-            color: #000; 
+        .dashboard-card {
+            width: 90vw; max-width: 1200px; min-height: 70vh;
+            background: rgba(15, 15, 15, 0.7); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl); padding: 50px;
+            position: relative; display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform-style: preserve-3d; transition: transform 0.1s ease-out;
         }
-        .nav-item:hover, .nav-item.active { opacity: 1; font-weight: bold; }
-        .nav-item.active::after {
-            content: ''; position: absolute; bottom: -0.5vh; left: 0; width: 100%; height: 0.3vh; background: #000; border-radius: 1vh;
+        .hero-text { z-index: 2; }
+        .hero-name {
+            font-family: 'Orbitron', sans-serif; font-size: 5vw; line-height: 0.9;
+            font-weight: 900; text-transform: uppercase; color: white; position: relative;
         }
-
-        .menu-circle {
-            background: #000; color: #fff; width: 4vh; height: 4vh; border-radius: 50%; 
-            display: inline-flex; align-items: center; justify-content: center; margin-right: 1.5vw; font-size: 1.5vh; cursor: pointer;
+        .hero-name::before {
+            content: attr(data-text); position: absolute; left: 2px; text-shadow: -1px 0 #ff00c1;
+            top:0; color: white; overflow: hidden; clip: rect(0,900px,0,0);
+            animation: glitch 2.5s infinite linear alternate-reverse;
         }
-
-        .profile-pill {
-            background: #000; color: #fff; padding: 1vh 2vw; border-radius: 5vh; display: flex; align-items: center; gap: 1vw; font-weight: bold; font-size: 1.6vh;
+        @keyframes glitch {
+            0% { clip: rect(44px, 9999px, 56px, 0); }
+            5% { clip: rect(12px, 9999px, 81px, 0); }
+            100% { clip: rect(66px, 9999px, 14px, 0); }
         }
-
-        /* --- Hero --- */
-        .hero-section { width: 95vw; margin: 4vh auto 4vh; background: #000; border-radius: var(--radius-xl); padding: 5vh 0; text-align: center; position: relative; color: #fff; overflow: hidden; box-shadow: 0 2vh 4vh rgba(0,0,0,0.3); }
-        .big-text { font-family: 'Montserrat', sans-serif; font-size: 10vw; font-weight: 900; text-transform: uppercase; line-height: 1; position: relative; z-index: 1; letter-spacing: -0.5vw; }
         
-        .glowing-o { 
-            display: inline-block; width: 7vw; height: 7vw; background: radial-gradient(circle, #fff 10%, #ccc 40%, #000 90%); border-radius: 50%; vertical-align: middle; margin: 0 -0.5vw; box-shadow: 0 0 3vh 1vh rgba(255, 255, 255, 0.6); animation: glow 3s infinite; position: relative; 
+        .hero-img-box {
+            width: 350px; height: 350px; border-radius: 50%; overflow: hidden;
+            border: 2px solid var(--accent-purple); box-shadow: 0 0 40px rgba(176, 38, 255, 0.3);
+            position: relative;
         }
-        .glowing-o::before, .glowing-o::after {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 0.2vh solid rgba(255, 255, 255, 0.5); z-index: -1; animation: ripple-effect 2.5s infinite linear;
+        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- SECTIONS & STAIRS --- */
+        .section-header {
+            width: 90vw; margin: 10vh auto 5vh; display: flex; align-items: center; gap: 20px;
         }
-        .glowing-o::after { animation-delay: 1.25s; }
-        .signature { font-family: 'Dancing Script', cursive; font-size: 5vw; color: #d4e157; position: absolute; bottom: 2vh; right: 5vw; transform: rotate(-5deg); z-index: 2; }
+        .section-pill {
+            background: var(--accent-cyan); color: #000; padding: 5px 20px;
+            border-radius: 20px; font-weight: 900; font-family: 'Orbitron';
+        }
+        .section-title { font-family: 'Orbitron'; font-size: 24px; color: #fff; }
+        .section-line { height: 1px; background: var(--glass-border); flex-grow: 1; }
 
-        /* --- Dashboard --- */
-        .dashboard-container { width: 95vw; margin: 0 auto 5vh; background: #0d0d0d; border-radius: var(--radius-xl); padding: 4vh; position: relative; min-height: 60vh; color: #fff; display: flex; flex-direction: column; }
-        .dash-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4vh; }
-        .search-pill { background: #222; padding: 1vh 2vw; border-radius: 5vh; display: flex; align-items: center; gap: 1vw; font-size: 1.5vh; color: #888; width: 25vw; }
-        .collab-text { font-family: 'Montserrat', sans-serif; letter-spacing: 0.5vw; font-size: 1.5vh; border-bottom: 1px solid #444; padding-bottom: 0.5vh; }
-        .dash-content { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2vw; height: 100%; }
-        .dash-left { display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 2vh; }
-        .tag-pill { border: 1px solid #fff; border-radius: 5vh; padding: 0.5vh 1.5vw; font-size: 1.2vh; display: inline-flex; align-items: center; gap: 1vw; width: fit-content; margin-bottom: 2vh; }
-        .title-graphic { font-family: 'Montserrat', sans-serif; font-size: 7vw; line-height: 0.9; font-weight: 900; opacity: 0.9; }
-        .title-outline { -webkit-text-stroke: 1px #fff; color: transparent; font-style: italic; font-size: 4vw; display: block; margin-top: -1vh; margin-bottom: 1vh; }
-        .slider-bar { width: 80%; height: 1vh; background: #333; border-radius: 1vh; margin: 4vh 0; position: relative; }
-        .slider-fill { width: 40%; height: 100%; background: #fff; border-radius: 1vh; }
-        .slider-knob { width: 3vh; height: 3vh; background: #0d0d0d; border: 0.4vh solid #fff; border-radius: 50%; position: absolute; top: 50%; left: 40%; transform: translate(-50%, -50%); }
-        .icon-row { display: flex; gap: 2vw; }
-        .circle-icon { width: 5vh; height: 5vh; background: #eee; color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2vh; }
-        
-        .dash-right-card { background: #fff; color: #000; border-radius: var(--radius-lg); padding: 3vh; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: -1vh 1vh 3vh rgba(0,0,0,0.5); }
-        .card-btns { display: flex; gap: 1vw; margin-bottom: 2vh; }
-        .btn-pill-black { background: #000; color: #fff; padding: 1vh 2vw; border-radius: 5vh; font-size: 1.4vh; font-weight: bold; }
-        .btn-pill-outline { border: 1px solid #000; padding: 1vh 2vw; border-radius: 5vh; font-size: 1.4vh; font-weight: bold; }
-        .card-title { font-size: 3vh; font-weight: bold; margin-bottom: 1vh; }
-        .card-desc { font-size: 1.6vh; color: #555; line-height: 1.5; margin-bottom: 2vh; }
-        
-        /* Step list styles for the animation */
-        .step-list { display: none; font-size: 1.4vh; color: #333; line-height: 1.8; font-weight: 500; }
-        
-        .view-more-btn { background: #eee; padding: 1vh 2vw; border-radius: 5vh; display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 1.5vh; width: 100%; cursor: pointer; transition: background 0.3s; }
-        .view-more-btn:hover { background: #ddd; }
-        .arrow-circle { background: #000; color: #fff; width: 3vh; height: 3vh; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .stairs-container {
+            width: 90vw; margin: 0 auto; position: relative;
+            display: flex; flex-direction: column; gap: 80px; padding: 40px 0;
+        }
+        .scroll-track {
+            position: absolute; top: 0; bottom: 0; left: 50%; width: 2px;
+            background: rgba(255, 255, 255, 0.1); transform: translateX(-50%);
+        }
+        .scroll-fill {
+            width: 100%; height: 0%; 
+            background: linear-gradient(180deg, var(--accent-purple), var(--accent-cyan));
+            box-shadow: 0 0 15px var(--accent-cyan); position: relative;
+        }
+        .scroll-star {
+            position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%);
+            font-size: 20px; color: #fff; text-shadow: 0 0 10px var(--accent-cyan);
+        }
 
-        /* --- SCROLL & STAIRS LAYOUT --- */
-        .section-header { width: 90vw; margin: 5vh auto 2vh; display: flex; align-items: center; gap: 2vw; }
-        .section-pill { background: #000; color: #fff; padding: 0.5vh 3vw; border-radius: 2vh; font-weight: bold; }
-        .section-line { height: 0.2vh; background: #bbb; flex-grow: 1; }
-
-        .stairs-container { width: 90vw; margin: 0 auto 5vh; position: relative; display: flex; flex-direction: column; gap: 6vh; padding: 2vh 0; }
-        
-        .scroll-track { position: absolute; top: 0; bottom: 0; left: 50%; width: 0.4vh; background: rgba(0, 0, 0, 0.1); transform: translateX(-50%); border-radius: 1vh; z-index: 0; overflow: visible; }
-        .scroll-fill { width: 100%; height: 0%; background: linear-gradient(180deg, #4facfe 0%, #00f2fe 50%, #f093fb 100%); border-radius: 1vh; box-shadow: 0 0 2vh rgba(0, 242, 254, 0.8); position: relative; }
-        .scroll-star { position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 50%); font-size: 3vh; color: #fff; text-shadow: 0 0 1vh #00f2fe; animation: star-spin 3s infinite linear; z-index: 2; }
-
-        /* --- SPLIT CARD DESIGN --- */
+        /* --- SPOTLIGHT CARD --- */
         .glass-card {
-            width: 45vw;
-            background: rgba(119, 117, 117, 0.56);
-            backdrop-filter: blur(1.5vh);
-            -webkit-backdrop-filter: blur(1.5vh);
-            border: 2px solid rgba(0, 0, 0, 0.815);
-            border-radius: var(--radius-md);
-            padding: 10px;
-            box-shadow: 0 1vh 3vh rgb(0, 0, 0);
-            position: relative; z-index: 1;
-            display: flex;
-            overflow: hidden;
-            height: 45vh;
+            width: 45%; background: rgba(20, 20, 20, 0.6);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+            padding: 20px; position: relative; display: flex; overflow: hidden;
+            transition: transform 0.3s;
+        }
+        /* Spotlight Logic */
+        .glass-card::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: var(--radius-md); padding: 1px;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.4), transparent 40%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; opacity: 0; transition: opacity 0.5s;
+        }
+        .glass-card:hover::before { opacity: 1; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+
+        .step-left { align-self: flex-start; margin-right: 50%; flex-direction: row; }
+        .step-right { align-self: flex-end; margin-left: 50%; flex-direction: row-reverse; }
+
+        .card-text { width: 50%; padding: 20px; display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+        .card-img-box { width: 50%; height: 250px; overflow: hidden; border-radius: 10px; }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; filter: grayscale(30%); }
+        .glass-card:hover .card-img-box img { transform: scale(1.1); filter: grayscale(0%); }
+
+        .project-num {
+            background: var(--accent-purple); color: #fff; width: 25px; height: 25px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; font-weight: bold;
         }
 
-        .card-text-section { width: 50%; padding: 3vh; display: flex; flex-direction: column; justify-content: center; }
-        .card-image-section { width: 50%; height: 100%; }
-        .split-image { width: 100%; height: 100%; object-fit: cover; }
-        
-        .step-left { align-self: flex-start; margin-right: 50%; padding-right: 2vw; flex-direction: row; }
-        .step-right { align-self: flex-end; margin-left: 50%; padding-left: 2vw; flex-direction: row-reverse; }
-        .step-right .card-text-section { text-align: right; align-items: flex-end; }
-
-        /* --- UPDATED ABOUT SECTION (STACKED) --- */
+        /* --- ABOUT SECTION --- */
         .about-section {
-            width: 95vw;
-            margin: 5vh auto 0;
-            position: relative;
+            width: 90vw; margin: 0 auto; background: #0f0f0f;
             border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-            overflow: hidden;
-            padding: 5vh;
-            background: #f0f0f0;
-            min-height: 80vh;
-            box-shadow: 0 2vh 5vh rgba(0,0,0,0.1);
+            padding: 60px; position: relative; border-top: 1px solid var(--glass-border);
         }
-
-        .about-bg-anim {
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(200,200,200,0.4) 0%, rgba(150,150,150,0.1) 50%, rgba(224,224,224,0) 70%);
-            z-index: 0;
-            filter: blur(60px);
-            opacity: 0.6;
+        .profile-container { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+        .profile-left {
+            flex: 1; min-width: 300px; background: rgba(255,255,255,0.03);
+            padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center;
         }
-
-        /* CHANGED GRID TO FLEX COLUMN */
-        .about-content {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column; /* Stacks items vertically */
-            gap: 4vh;
-            height: 100%;
-            align-items: center; /* Centers items horizontally */
-        }
-
-        .profile-card {
-            background: rgba(150, 148, 148, 0.492);
-            backdrop-filter: blur(20px);
-            border: 4px solid rgba(97, 95, 95, 0.512);
-            border-radius: var(--radius-lg);
-            padding: 4vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            box-shadow: 0 1vh 3vh rgba(64, 63, 63, 0.325);
-            width: 100%;
-            max-width: 800px; /* Limits width so it doesn't look weird */
-        }
-
-        .profile-img {
-            width: 15vh; height: 15vh;
-            background: #3333338a;
-            border-radius: 50%;
-            margin-bottom: 2vh;
-            border: 0.5vh solid #201d1d71;
-            box-shadow: 0 1vh 2vh rgba(0,0,0,0.2);
-            background-image: url('https://via.placeholder.com/150');
-            background-size: cover;
-        }
-
-        .resume-details {
-            display: flex;
-            flex-direction: column;
-            gap: 1vh;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .resume-block {
-            background: rgba(82, 81, 81, 0.3);
-            border-radius: var(--radius-md);
-            padding: 4vh;
-            border: 2px solid rgba(78, 77, 77, 0.405);
-            position: relative;
-            overflow: hidden;
-        }
+        .profile-right { flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 20px; }
         
-        .resume-block::before {
-            content: ''; position: absolute; top:0; left:0; width:0.5vh; height:100%; background: #000;
-        }
-
-        .skill-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1vh;
-            margin-top: 1vh;
-        }
-
         .skill-pill {
-            background: #000;
-            color: #fff;
-            padding: 0.5vh 1.5vh;
-            border-radius: 2vh;
-            font-size: 1.2vh;
-            font-weight: bold;
-            opacity: 0;
-            transform: translateY(10px);
+            background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
+            padding: 5px 15px; border-radius: 20px; font-size: 12px; display: inline-block; margin: 5px;
+            transition: 0.3s;
         }
-
-        .h-line {
-            width: 100%; height: 1px; background: rgba(0,0,0,0.1); margin: 2vh 0;
-        }
-
-        .contact-info div {
-            font-size: 1.4vh; margin-bottom: 0.5vh; color: #444; display:flex; align-items:center; gap:1vh;
-        }
-
-        /* --- FOOTER STYLES --- */
-        footer {
-            background: #050505;
-            color: #fff;
-            padding: 8vh 5vw 4vh 5vw;
-            position: relative;
-            overflow: hidden;
-        }
+        .skill-pill:hover { background: var(--accent-cyan); color: #000; }
         
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -20vh; left: 50%;
-            transform: translateX(-50%);
-            width: 80%; height: 40vh;
-            background: radial-gradient(ellipse at center, rgba(30, 60, 100, 0.4) 0%, rgba(0,0,0,0) 70%);
-            pointer-events: none;
+        .resume-block {
+            background: rgba(255,255,255,0.03); padding: 25px; border-radius: 15px;
+            border-left: 3px solid var(--accent-purple); position: relative; overflow: hidden;
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4vw;
-            margin-bottom: 8vh;
-            position: relative;
-            z-index: 1;
+        /* --- FOOTER (Hybrid: Sanchit Content + Mriganko Effects) --- */
+        footer {
+            background: #020202; padding: 80px 0 0; position: relative; overflow: hidden; border-top: 1px solid #222;
         }
-
-        .footer-logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 4vh;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 1vh;
-            margin-bottom: 2vh;
+        .footer-particles {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;
         }
-
-        .footer-col h4 {
-            font-size: 1.8vh;
-            font-weight: 700;
-            margin-bottom: 3vh;
+        .f-particle {
+            position: absolute; width: 2px; height: 2px; background: var(--accent-cyan);
+            border-radius: 50%; animation: float-up linear infinite;
         }
-
-        .footer-links {
-            list-style: none;
+        @keyframes float-up { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-100px); opacity: 0; } }
+        
+        .footer-grid {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+            max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; padding-bottom: 50px;
         }
-
-        .footer-links li {
-            margin-bottom: 1.5vh;
-        }
-
-        .footer-links a {
-            text-decoration: none;
-            color: #888;
-            font-size: 1.6vh;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
+        .footer-col h4 { color: #fff; margin-bottom: 20px; font-family: 'Orbitron'; font-size: 16px; }
+        .footer-links li { list-style: none; margin-bottom: 10px; }
+        .footer-links a { text-decoration: none; color: #888; font-size: 14px; transition: 0.3s; }
+        .footer-links a:hover { color: var(--accent-cyan); padding-left: 5px; }
 
         .footer-bottom {
-            border-top: 1px solid #222;
-            padding-top: 4vh;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+            border-top: 1px solid rgba(255,255,255,0.1); padding: 30px 0;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;
         }
-
-        .copyright {
-            font-size: 1.4vh;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 1.5vw;
-        }
-
+        .social-row { display: flex; gap: 15px; }
         .social-btn {
-            background: #fff;
-            color: #000;
-            width: 4vh; height: 4vh;
-            border-radius: 1vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2vh;
-            cursor: pointer;
-            transition: transform 0.2s;
+            width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.1);
+            display: flex; justify-content: center; align-items: center; color: #fff; transition: 0.3s;
         }
-        .social-btn:hover {
-            transform: scale(1.1);
+        .social-btn:hover { background: var(--accent-purple); transform: scale(1.1); }
+
+        /* Utils */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .hero-container { padding-top: 120px; display: block; }
+            .dashboard-card { flex-direction: column-reverse; width: 95vw; height: auto; margin: 0 auto; transform: none !important; }
+            .hero-img-box { margin-bottom: 30px; width: 200px; height: 200px; }
+            .glass-card { width: 100%; margin: 0 !important; flex-direction: column !important; }
+            .card-text, .card-img-box { width: 100%; }
+            .stairs-container { gap: 30px; }
+            .scroll-track { display: none; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+            .social-row { justify-content: center; margin-top: 20px; }
         }
-        /* --- Profile Image Container --- */
-.profile-img {
-    width: 18vh;               /* Circle ka size */
-    height: 18vh;              /* Same height taaki perfect round ho */
-    border-radius: 50%;        /* Isse circle banta hai */
-    overflow: hidden;          /* Image ko circle ke bahar jaane se rokta hai */
-    border: 1vh solid #a7a4a4a5;  /* White border */
-    box-shadow: 0 1vh 3vh rgba(0,0,0,0.2); /* Thoda shadow depth ke liye */
-    margin-bottom: 2vh;        /* Niche spacing */
-    background-color: #333;    /* Agar image load na ho to ye color dikhega */
-    
-    /* Center align ke liye (agar flex parent mein hai to zaroorat nahi) */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* --- Image Styling --- */
-.profile-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;   /* Magic property: Image stretch nahi hogi, crop hokar fit hogi */
-    display: block;      /* Image ke niche ka extra gap hatane ke liye */
-}
-
     </style>
 </head>
 <body>
 
-    <nav class="navbar-container">
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <nav class="navbar">
+        <div class="logo hover-target">SANCHIT.</div>
         <div class="nav-links">
-            <div class="menu-circle">≡</div> 
-            <a href="#hero-section" class="nav-item active">Home</a>
-            <a href="#aboutSection" class="nav-item">About Me</a>
-            <a href="#poster" class="nav-item">Poster Design</a>
-            <a href="#interiorSection" class="nav-item">Interior Design</a>
-            <a href="#footerSection" class="nav-item">Accounts</a>
+            <div style="font-size:20px; color:white; cursor:pointer;" class="hover-target">≡</div> 
+            <a href="#hero-section" class="nav-item active hover-target">Home</a>
+            <a href="#aboutSection" class="nav-item hover-target">About Me</a>
+            <a href="#poster" class="nav-item hover-target">Poster</a>
+            <a href="#interiorSection" class="nav-item hover-target">Interior</a>
         </div>
-        <div class="profile-pill">
-            <div style="width:2vh; height:2vh; background:#fff; border-radius:50%;"></div>
-            Sanchit Jouhri
-        </div>
+        <button class="btn-talk hover-target" onclick="window.location.href='mailto:sanchit.jouhri@gmail.com'">// CONTACT</button>
     </nav>
 
-    <div class="hero-section" id="hero-section">
-        <div style="position:absolute; top:2vh; left:3vw; font-size:1.5vh; color:#888;">VISUAL ARTIST</div>
-        <div class="big-text">P<span class="glowing-o"></span>rtf<span class="glowing-o"></span>lio</div>
-        <div class="signature">Sanchit Jouhri</div>
-    </div>
-
-    <div class="dashboard-container reveal">
-        <div class="dash-top">
-            <div class="search-pill"><span></span> Search...</div>
-            <div class="collab-text">COLLABORATION</div>
-        </div>
-        <div class="dash-content">
-            <div class="dash-left">
-                <div>
-                    <div class="tag-pill"><span style="font-weight:900;">0.1</span><span>HISTORY OF GRAPHIC DESIGN</span></div>
-                    <div class="title-graphic">GRAPHIC<br>DESIGN</div>
-                    <span class="title-outline">Visual Arts</span>
+    <div class="hero-container" id="hero-section">
+        <div class="dashboard-card" id="hero-tilt">
+            <div class="hero-text">
+                <p style="color:var(--accent-purple); letter-spacing:3px; font-weight:bold; margin-bottom:10px;">VISUAL ARTIST</p>
+                <div style="position:relative; margin-bottom:20px;">
+                    <h1 class="hero-name" data-text="SANCHIT">SANCHIT</h1>
+                    <h1 class="hero-name" data-text="JOUHRI" style="color:transparent; -webkit-text-stroke: 1px #fff; margin-top:-10px;">JOUHRI</h1>
                 </div>
-                <div>
-                    <div class="slider-bar"><div class="slider-fill"></div><div class="slider-knob"></div></div>
-                    <div class="icon-row">
-                        <div class="circle-icon">♥</div><div class="circle-icon"></div><div class="circle-icon">🔗</div>
-                    </div>
+                <p style="color:#aaa; max-width:400px; line-height:1.6; margin-bottom:30px;">
+                    Bridging the gap between traditional compositing and neural rendering. Specializing in high-fidelity VFX and seamless AI integration.
+                </p>
+                <div style="display:flex; gap:20px;">
+                    <div style="border:1px solid #fff; padding:5px 20px; border-radius:30px; font-size:12px;" class="hover-target">GRAPHIC DESIGN</div>
+                    <div style="border:1px solid #fff; padding:5px 20px; border-radius:30px; font-size:12px;" class="hover-target">INTERIOR</div>
                 </div>
             </div>
             
-            <div class="dash-right-card">
-                <div>
-                    <div class="card-btns"><span class="btn-pill-black">PROJECTS</span><span class="btn-pill-outline">CONTACT</span></div>
-                    
-                    <h2 class="card-title">How I Design Magic </h2>
-                    
-                    <p class="card-desc" id="design-desc">
-                        I don't just move pixels; I tell stories! From chaotic coffee-fueled sketches to polished masterpieces, my process is a wild ride of rhythm, balance, and bold choices.
-                    </p>
-                    
-                    <div id="design-steps" class="step-list">
-                        1.  <strong>Brainstorm:</strong> Chaos & Coffee.<br>
-                        2.  <strong>Sketch:</strong> Rough & Raw.<br>
-                        3.  <strong>Color:</strong> Vibe Check.<br>
-                        4.  <strong>Polish:</strong> Pixel Perfect.
-                    </div>
-                </div>
-                
-                <div class="view-more-btn" onclick="toggleSteps()">
-                    <span id="btn-text">View Process</span> <div class="arrow-circle">➔</div>
-                </div>
-            </div>
-            </div>
-    </div>
-    
-    <div class="section-header reveal">
-        <span class="section-pill">01</span>
-        <span style="font-weight:bold; font-size: 2vh; color:#000;">ABOUT ME</span>
-        <div class="section-line"></div>
-    </div>
-
-    <div class="about-section" id="aboutSection">
-        <div class="about-bg-anim"></div>
-
-        <div class="about-content">
-            <div class="profile-card profile-gsap">
-                <div class="profile-img">
-                     <img src="image.png" class="split-image">
-                </div>
-                <h2 style="font-size:2.5vh; font-weight:900; margin-bottom:0.5vh;">SANCHIT JOUHRI</h2>
-                <div style="font-size:1.5vh; color:#666; margin-bottom:2vh;">INTERIOR DESIGNER & VISUAL ARTIST</div>
-                
-                <p style="font-size:1.4vh; line-height:1.6; color:#444; margin-bottom:3vh;">
-                    I am Dedicated and hardworking with internal drive to deliver. I specialize in 3D Interior design according to the client's need.
-                </p>
-
-                <div class="h-line"></div>
-
-                <div class="contact-info" style="width:100%; text-align:left;">
-                    <div><span>📍</span> D-1/274 Sector-F Jankipuram Lucknow</div>
-                    <div><span>📞</span> +91 9918691444</div>
-                    <div><span></span> sanchit.jouhri@gmail.com</div>
-                    <div><span></span> Chess & Travelling</div>
-                </div>
-            </div>
-
-            <div class="resume-details">
-                
-                <div class="resume-block resume-gsap">
-                    <h3 style="font-size:2vh; font-weight:bold; margin-bottom:2vh;">EDUCATION</h3>
-                    
-                    <div style="display:flex; justify-content:space-between; margin-bottom:1vh;">
-                        <span style="font-weight:bold;">BSC. in Media Graphics and Animation</span>
-                        <span style="background:#000; color:#fff; padding:0.2vh 1vh; border-radius:1vh; font-size:1.2vh;">2023 - 2027</span>
-                    </div>
-                    <div style="font-size:1.4vh; color:#555; margin-bottom:2vh;">YCMOU</div>
-                    
-                    <div class="h-line"></div>
-
-                    <div style="display:flex; justify-content:space-between; margin-bottom:1vh;">
-                        <span style="font-weight:bold;">Elementary School</span>
-                        <span style="background:#bbb; color:#000; padding:0.2vh 1vh; border-radius:1vh; font-size:1.2vh;">2007 - 2022</span>
-                    </div>
-                </div>
-
-                <div class="resume-block resume-gsap">
-                    <h3 style="font-size:2vh; font-weight:bold; margin-bottom:2vh;">SOFTWARE SKILLS</h3>
-                    <div class="skill-grid">
-                        <span class="skill-pill">ADOBE PHOTOSHOP</span>
-                        <span class="skill-pill">ADOBE ILLUSTRATOR</span>
-                        <span class="skill-pill">COREL DRAW</span>
-                        <span class="skill-pill">AUTODESK 3DS MAX</span>
-                        <span class="skill-pill">HINDI</span>
-                        <span class="skill-pill">ENGLISH</span>
-                    </div>
-                </div>
-
+            <div class="hero-img-box hover-target">
+                <img src="image.png" alt="Sanchit Jouhri">
             </div>
         </div>
     </div>
-
 
     <div class="section-header reveal" id="poster">
+        <span class="section-pill">01</span>
+        <span class="section-title">POSTER COLLECTION</span>
+        <div class="section-line"></div>
+    </div>
+
+    <div class="stairs-container">
+        <div class="scroll-track"><div class="scroll-fill" id="posterScroll"><div class="scroll-star">✦</div></div></div>
+
+        <div class="glass-card step-left reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                    <div class="project-num">1</div>
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">SPORTSWEAR</span>
+                </div>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px;">Nike Campaign</h3>
+                <p style="color:#aaa; font-size:13px;">"Just Do It" - A dynamic, motion-centric ad design focusing on speed and agility.</p>
+            </div>
+            <div class="card-img-box">
+                <img src="nike.png" alt="Nike Poster">
+            </div>
+        </div>
+
+        <div class="glass-card step-right reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-bottom:10px;">
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">PRODUCT DESIGN</span>
+                    <div class="project-num">2</div>
+                </div>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px; text-align:right;">Unleash Sound</h3>
+                <p style="color:#aaa; font-size:13px; text-align:right;">High-fidelity 3D product visualization for premium audio gear.</p>
+            </div>
+            <div class="card-img-box">
+                <img src="headphone.png" alt="Headphone Poster">
+            </div>
+        </div>
+
+        <div class="glass-card step-left reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                    <div class="project-num">3</div>
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">THUMBNAIL ART</span>
+                </div>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px;">The Ranveer Show</h3>
+                <p style="color:#aaa; font-size:13px;">Viral thumbnail composition for TRS Ep. 300 featuring Sanjay Dutt.</p>
+            </div>
+            <div class="card-img-box">
+                <img src="podcast.png" alt="Podcast Poster">
+            </div>
+        </div>
+
+        <div class="glass-card step-right reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-bottom:10px;">
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">FASHION BRANDING</span>
+                    <div class="project-num">4</div>
+                </div>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px; text-align:right;">Regal Footwear</h3>
+                <p style="color:#aaa; font-size:13px; text-align:right;">Effortlessly Elegant. Luxury footwear social media creative.</p>
+            </div>
+            <div class="card-img-box">
+                <img src="shoes.png" alt="Regal Poster">
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header reveal" id="interiorSection">
         <span class="section-pill">02</span>
-        <span style="font-weight:bold; font-size: 2vh; color:#000;">POSTER COLLECTION</span>
+        <span class="section-title">INTERIOR DESIGN</span>
         <div class="section-line"></div>
     </div>
 
     <div class="stairs-container">
-        <div class="scroll-track">
-            <div class="scroll-fill" id="posterGlowBar">
-                <div class="scroll-star">✦</div>
-            </div>
-        </div>
+        <div class="scroll-track"><div class="scroll-fill" id="interiorScroll"><div class="scroll-star">✦</div></div></div>
 
-  
-   
-
-
-
-
-        <div class="glass-card step-left reveal reveal-left">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-start; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">1</span>
-                    <span style="font-weight:bold; font-size: 1.8vh;">Sportswear</span>
+        <div class="glass-card step-left reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                    <div class="project-num">A</div>
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">RESIDENTIAL</span>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">Nike Campaign</h3>
-                <p style="font-size:1.4vh; color:#d5d2d2;">"Just Do It" - A dynamic, motion-centric ad design focusing on speed and agility.</p>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px;">Serene Haven</h3>
+                <p style="color:#aaa; font-size:13px;">A cozy master bedroom blending pastel tones with warm ambient cove lighting.</p>
             </div>
-            <div class="card-image-section">
-                <img src="nike.png" class="split-image" alt="Nike Poster">
+            <div class="card-img-box">
+                <img src="bedroom.png" alt="Bedroom Interior">
             </div>
         </div>
 
-        <div class="glass-card step-right reveal reveal-right">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-end; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="font-weight:bold; font-size: 1.8vh;">Product Design</span>
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">2</span>
+        <div class="glass-card step-right reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-bottom:10px;">
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">LUXURY LIVING</span>
+                    <div class="project-num">B</div>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">Unleash Sound</h3>
-                <p style="font-size:1.4vh; color:#d3d2d2;">High-fidelity 3D product visualization for premium audio gear.</p>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px; text-align:right;">Earthy Elegance</h3>
+                <p style="color:#aaa; font-size:13px; text-align:right;">Monochromatic earth tones creating a grounded, spacious contemporary lounge.</p>
             </div>
-            <div class="card-image-section">
-                <img src="headphone.png" class="split-image" alt="Headphone Poster">
+            <div class="card-img-box">
+                <img src="living.png" alt="Living Room Interior">
             </div>
         </div>
 
-        <div class="glass-card step-left reveal reveal-left">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-start; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">3</span>
-                    <span style="font-weight:bold; font-size: 1.8vh;">Thumbnail Art</span>
+        <div class="glass-card step-left reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                    <div class="project-num">C</div>
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">COMMERCIAL</span>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">The Ranveer Show</h3>
-                <p style="font-size:1.4vh; color:#ffffffbc;">Viral thumbnail composition for TRS Ep. 300 featuring Sanjay Dutt.</p>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px;">The Tech Hub</h3>
+                <p style="color:#aaa; font-size:13px;">Ergonomic workspace designed for focus, featuring natural light integration.</p>
             </div>
-            <div class="card-image-section">
-                <img src="podcast.png" class="split-image" alt="Podcast Poster">
+            <div class="card-img-box">
+                <img src="class.png" alt="Office Interior">
             </div>
         </div>
 
-        <div class="glass-card step-right reveal reveal-right">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-end; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="font-weight:bold; font-size: 1.8vh;">Fashion Branding</span>
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">4</span>
+        <div class="glass-card step-right reveal spotlight-card hover-target">
+            <div class="card-text">
+                <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end; margin-bottom:10px;">
+                    <span style="color:var(--accent-cyan); font-weight:bold; font-size:12px;">WELLNESS</span>
+                    <div class="project-num">D</div>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">Regal Footwear</h3>
-                <p style="font-size:1.4vh; color:#fafafaa9;">Effortlessly Elegant. Luxury footwear social media creative.</p>
+                <h3 style="font-family:'Orbitron'; font-size:20px; margin-bottom:5px; text-align:right;">Noir Retreat</h3>
+                <p style="color:#aaa; font-size:13px; text-align:right;">A moody, textured sanctuary designed for deep relaxation and sensory calm.</p>
             </div>
-            <div class="card-image-section">
-                <img src="shoes.png" class="split-image" alt="Regal Poster">
+            <div class="card-img-box">
+                <img src="bath.png" alt="Spa Interior">
             </div>
         </div>
-
     </div>
 
-
-
-
-
-
-
-
-        <div class="section-header reveal" id="interiorSection">
+    <div class="section-header reveal" id="aboutSection">
         <span class="section-pill">03</span>
-        <span style="font-weight:bold; font-size: 2vh; color:#000;">INTERIOR DESIGN</span>
+        <span class="section-title">ABOUT ME</span>
         <div class="section-line"></div>
     </div>
 
-    <div class="stairs-container">
-        <div class="scroll-track">
-            <div class="scroll-fill" id="interiorGlowBar">
-                <div class="scroll-star">✦</div>
-            </div>
-        </div>
-
-        <div class="glass-card step-left reveal reveal-left">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-start; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">A</span>
-                    <span style="font-weight:bold; font-size: 1.8vh;">Residential</span>
+    <div class="about-section">
+        <div class="profile-container">
+            <div class="profile-left reveal hover-target">
+                <div style="width:120px; height:120px; border-radius:50%; overflow:hidden; border:3px solid rgba(255,255,255,0.2); margin:0 auto 20px;">
+                    <img src="image.png" style="width:100%; height:100%; object-fit:cover;">
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">Serene Haven</h3>
-                <p style="font-size:1.4vh; color:#ffffffd5;">A cozy master bedroom blending pastel tones with warm ambient cove lighting.</p>
-            </div>
-            <div class="card-image-section">
-                <img src="bedroom.png" class="split-image" alt="Bedroom Interior">
-            </div>
-        </div>
-
-        <div class="glass-card step-right reveal reveal-right">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-end; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="font-weight:bold; font-size: 1.8vh;">Luxury Living</span>
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">B</span>
+                <h2 style="font-family:'Orbitron'; font-size:22px; margin-bottom:5px;">SANCHIT JOUHRI</h2>
+                <div style="color:var(--accent-cyan); font-size:12px; margin-bottom:20px;">INTERIOR DESIGNER & VISUAL ARTIST</div>
+                <p style="font-size:13px; color:#aaa; line-height:1.6; margin-bottom:20px;">
+                    I am Dedicated and hardworking with internal drive to deliver. I specialize in 3D Interior design according to the client's need.
+                </p>
+                <div style="display:flex; flex-wrap:wrap; justify-content:center;">
+                    <span class="skill-pill">ADOBE PHOTOSHOP</span>
+                    <span class="skill-pill">ADOBE ILLUSTRATOR</span>
+                    <span class="skill-pill">AUTODESK 3DS MAX</span>
+                    <span class="skill-pill">COREL DRAW</span>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">Earthy Elegance</h3>
-                <p style="font-size:1.4vh; color:#ffffffc7;">Monochromatic earth tones creating a grounded, spacious contemporary lounge.</p>
             </div>
-            <div class="card-image-section">
-                <img src="living.png" class="split-image" alt="Living Room Interior">
-            </div>
-        </div>
 
-        <div class="glass-card step-left reveal reveal-left">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-start; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">C</span>
-                    <span style="font-weight:bold; font-size: 1.8vh;">Commercial</span>
+            <div class="profile-right reveal">
+                <div class="resume-block hover-target">
+                    <h3 style="font-family:'Orbitron'; font-size:18px; margin-bottom:15px;">EDUCATION</h3>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <strong style="color:var(--accent-purple);">BSC. in Media Graphics and Animation</strong>
+                        <span style="background:#222; padding:2px 8px; border-radius:5px; font-size:12px;">2023 - 2027</span>
+                    </div>
+                    <div style="font-size:13px; color:#888;">YCMOU</div>
+                    <div style="width:100%; height:1px; background:rgba(255,255,255,0.1); margin:15px 0;"></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <strong style="color:var(--accent-purple);">Elementary School</strong>
+                        <span style="background:#222; padding:2px 8px; border-radius:5px; font-size:12px;">2007 - 2022</span>
+                    </div>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">The Tech Hub</h3>
-                <p style="font-size:1.4vh; color:#ffffffcd;">Ergonomic workspace designed for focus, featuring natural light integration.</p>
-            </div>
-            <div class="card-image-section">
-                <img src="class.png" class="split-image" alt="Office Interior">
-            </div>
-        </div>
 
-        <div class="glass-card step-right reveal reveal-right">
-            <div class="card-text-section">
-                <div style="display:flex; justify-content:flex-end; align-items:center; gap:1vh; margin-bottom:1vh;">
-                    <span style="font-weight:bold; font-size: 1.8vh;">Wellness</span>
-                    <span style="background:#000; color:#fff; width:3vh; height:3vh; border-radius:50%; display:flex; justify-content:center; align-items:center;">D</span>
+                <div class="resume-block hover-target" style="margin-top:20px;">
+                    <h3 style="font-family:'Orbitron'; font-size:18px; margin-bottom:15px;">CONTACT</h3>
+                    <div style="font-size:13px; color:#aaa; display:flex; flex-direction:column; gap:10px;">
+                        <div><i class="fas fa-map-marker-alt" style="width:20px;"></i> D-1/274 Sector-F Jankipuram Lucknow</div>
+                        <div><i class="fas fa-phone" style="width:20px;"></i> +91 9918691444</div>
+                        <div><i class="fas fa-envelope" style="width:20px;"></i> sanchit.jouhri@gmail.com</div>
+                    </div>
                 </div>
-                <h3 style="font-size:2vh; margin-bottom:0.5vh;">Noir Retreat</h3>
-                <p style="font-size:1.4vh; color:#ffffffbd;">A moody, textured sanctuary designed for deep relaxation and sensory calm.</p>
-            </div>
-            <div class="card-image-section">
-                <img src="bath.png" class="split-image" alt="Spa Interior">
             </div>
         </div>
-
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-    <footer id="footerSection">
-        <div class="footer-content">
-            <div class="footer-col" style="padding-right: 2vw;">
-                <div class="footer-logo">
-                    <span style="display:inline-block; width:1.5vh; height:2.5vh; background:#fff; border-radius:1vh;"></span>
-                    <span style="display:inline-block; width:1.5vh; height:1.5vh; background:#fff; border-radius:50%;"></span>
-                    Sanchit
-                </div>
+    <footer>
+        <div class="footer-particles" id="footer-particles"></div>
+        
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom:20px;">SANCHIT.</div>
+                <p style="color:#666; font-size:13px; line-height:1.6;">Creating visual narratives through code and design. Based in Lucknow, India.</p>
             </div>
             
             <div class="footer-col">
                 <h4>Explore</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Templates</a></li>
-                    <li><a href="#">Work</a></li>
+                    <li><a href="#" class="hover-target">Templates</a></li>
+                    <li><a href="#" class="hover-target">Work</a></li>
+                    <li><a href="#" class="hover-target">Process</a></li>
                 </ul>
             </div>
-
+            
             <div class="footer-col">
                 <h4>Resources</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Updates</a></li>
-                    <li><a href="#">Pricing</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#" class="hover-target">Updates</a></li>
+                    <li><a href="#" class="hover-target">Pricing</a></li>
+                    <li><a href="#" class="hover-target">Contact</a></li>
                 </ul>
             </div>
-
+            
             <div class="footer-col">
                 <h4>Company</h4>
                 <ul class="footer-links">
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#" class="hover-target">Terms</a></li>
+                    <li><a href="#" class="hover-target">Privacy</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <div class="copyright">
-                Ltd © 2026.<br>
-                All Rights Reserved
-            </div>
-            <div class="social-icons">
-                <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
-                <div class="social-btn"><i class="fa-brands fa-instagram"></i></div>
-                <div class="social-btn"><i class="fa-brands fa-tiktok"></i></div>
-                <div class="social-btn"><i class="fa-brands fa-youtube"></i></div>
-                <div class="social-btn"><i class="fa-brands fa-discord"></i></div>
+            <div style="color:#555; font-size:12px;">Ltd © 2026. All Rights Reserved</div>
+            <div class="social-row">
+                <a href="#" class="social-btn hover-target"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="social-btn hover-target"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="social-btn hover-target"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="social-btn hover-target"><i class="fa-brands fa-youtube"></i></a>
             </div>
         </div>
     </footer>
 
-
     <script>
-        // Existing Reveal Logic
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = windowHeight * 0.1;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
+        // --- 1. CURSOR ---
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        const hoverTargets = document.querySelectorAll('.hover-target');
 
-        // Existing Scroll Bars Logic
-        function updateAllScrollBars() {
-             const containers = document.querySelectorAll('.stairs-container');
-             containers.forEach((container, index) => {
-                 let bar = container.querySelector('.scroll-fill');
-                 if(!bar) return;
-
-                 const containerTop = container.offsetTop;
-                 const containerHeight = container.offsetHeight;
-                 const windowHeight = window.innerHeight;
-                 const scrollY = window.scrollY;
-
-                 const startPoint = containerTop - (windowHeight / 2);
-                 const endPoint = containerTop + containerHeight - (windowHeight / 2);
-                 const totalDistance = endPoint - startPoint;
-                 const scrolled = scrollY - startPoint;
-
-                 let percentage = 0;
-                 if (scrolled > 0) percentage = (scrolled / totalDistance) * 100;
-                 if (percentage < 0) percentage = 0;
-                 if (percentage > 100) percentage = 100;
-
-                 bar.style.height = percentage + "%";
-             });
-        }
-
-        window.addEventListener("scroll", () => {
-            reveal();
-            updateAllScrollBars();
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
         });
-        reveal();
-        updateAllScrollBars();
 
-        // --- NEW GSAP ANIMATION LOGIC FOR ABOUT SECTION ---
-        // Register ScrollTrigger
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => cursorOutline.classList.add('hovered'));
+            target.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
+        });
+
+        // --- 2. 3D TILT ---
+        const heroCard = document.getElementById('hero-tilt');
+        const heroContainer = document.querySelector('.hero-container');
+        if(window.innerWidth > 768) {
+            heroContainer.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
+                heroCard.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            heroContainer.addEventListener('mouseleave', () => { heroCard.style.transform = `rotateY(0deg) rotateX(0deg)`; });
+        }
+
+        // --- 3. SPOTLIGHT ---
+        document.querySelectorAll('.spotlight-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
+
+        // --- 4. SCROLL ANIMATIONS ---
         gsap.registerPlugin(ScrollTrigger);
-
-        // 1. Grayish Background "Breathing" Animation
-        gsap.to(".about-bg-anim", {
-            backgroundPosition: "100% 100%",
-            scale: 1.2,
-            duration: 10,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
+        document.querySelectorAll('.reveal').forEach(element => {
+            gsap.to(element, {
+                scrollTrigger: { trigger: element, start: "top 85%", toggleClass: "active" }
+            });
         });
 
-        // 2. Animate Profile Card Slide Up
-        gsap.from(".profile-gsap", {
-            scrollTrigger: {
-                trigger: "#aboutSection",
-                start: "top 80%",
-            },
-            y: 100,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out"
-        });
-
-        // 3. Animate Resume Blocks (Staggered)
-        gsap.from(".resume-gsap", {
-            scrollTrigger: {
-                trigger: "#aboutSection",
-                start: "top 70%",
-            },
-            x: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power2.out"
-        });
-
-        // 4. Animate Skill Pills (Pop Effect)
-        gsap.to(".skill-pill", {
-            scrollTrigger: {
-                trigger: ".resume-details",
-                start: "top 75%",
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: "back.out(1.7)"
-        });
-
-        // --- NEW TOGGLE FUNCTION FOR STEPS ---
-        function toggleSteps() {
-            var desc = document.getElementById("design-desc");
-            var steps = document.getElementById("design-steps");
-            var btnText = document.getElementById("btn-text");
-
-            if (steps.style.display === "none" || steps.style.display === "") {
-                desc.style.display = "none";
-                steps.style.display = "block";
-                btnText.innerText = "Back to Intro";
-            } else {
-                desc.style.display = "block";
-                steps.style.display = "none";
-                btnText.innerText = "View Process";
-            }
+        // Scroll Bar Logic
+        function updateScroll(barId, containerClass) {
+            const container = document.querySelector(containerClass); // Only selects first, need Logic for multiple
         }
+        
+        // Custom Scroll logic for multiple stairs containers
+        window.addEventListener("scroll", () => {
+            document.querySelectorAll('.stairs-container').forEach(container => {
+                const bar = container.querySelector('.scroll-fill');
+                if(!bar) return;
+                
+                const containerTop = container.offsetTop;
+                const containerHeight = container.offsetHeight;
+                const windowHeight = window.innerHeight;
+                const scrollY = window.scrollY;
 
+                const startPoint = containerTop - (windowHeight / 2);
+                const endPoint = containerTop + containerHeight - (windowHeight / 2);
+                const totalDistance = endPoint - startPoint;
+                const scrolled = scrollY - startPoint;
+
+                let percentage = 0;
+                if (scrolled > 0) percentage = (scrolled / totalDistance) * 100;
+                if (percentage > 100) percentage = 100;
+                bar.style.height = percentage + "%";
+            });
+        });
+
+        // --- 5. FOOTER PARTICLES ---
+        const footerContainer = document.getElementById('footer-particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('f-particle');
+            const size = Math.random() * 3 + 1;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            footerContainer.appendChild(particle);
+        }
     </script>
 </body>
 </html>
